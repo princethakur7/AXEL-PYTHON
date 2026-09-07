@@ -12,6 +12,7 @@ def generate_id():
 
 # Display Main Menu
 def show_menu():
+
     print("1. Add Expense")
     print("2. View All Expense")
     print("3. Search expense")
@@ -80,5 +81,126 @@ def add_expense():
     print("\nExpense added successfully!")
     print("Expense ID:", expense["id"])
 
-# homework is to add  print("3. Search expense")
+# Display One Expense
+def display_expense(expense):
+    print("ID       :", expense["id"])
+    print("Title    :", expense["title"])
+    print("Amount   :", format(expense["amount"],".2f"))
+    print("category :", expense["category"])
+    print("Date     :", expense["date"])
+
+# View All expenses
+def view_expense():
+    print("\n---------------ALL EXPENSES ----------------------")
+
+    if len(expenses) == 0:
+        print("No expenses recorded")
+        return
+
+    total = 0
+
+    for expense in expenses:
+        display_expense(expense)
+        total += expense("amount")
+
+    print("-"*50)
+    print("Total Expenses : Rs", format(total,".2f"))
+
+def search_expense():
+    print("\n--------- SEARCH EXPENSE ----------")
+
+    keyword = input("Enter title or category to search: ").lower()
+
+    found = False
+
+    for expense in expenses:
+        if (keyword in expense["title"].lower()
+                or keyword in expense["category"].lower()):
+
+            display_expense(expense)
+            found = True
+
+    if not found:
+        print("No matching expenses found")
+
+# Filter by Category
+def filter_category():
+    print("\n------------ FILTER BY CATEGORY ----------")
+
+    category = input("Enter Category : ").strip().lower()
+
+    found = False
+    category_total = 0
+
+    for expense in expenses:
+        if expense["category"].lower() == category:
+            display_expense(expense)
+
+            category_total += expense["amount"]
+            found = True
+
+    if found:
+        print("-"*50)
+        print(
+            "total Spend In ",
+            category, ": Rs ",
+            format(category_total, ".2f")
+        )
+    else:
+        print("No expenses found in this category.")
+
+# Delete Expense
+def delete_expense():
+    print("\n-------------- DELETE EXPENSE -----------")
+
+    if len(expenses) == 0:
+        print("No expense available.")
+
+    try:
+        expense_id = int(input("Enter Expense ID to delete : "))
+
+    except ValueError:
+        print("Invalid ID")
+        return
+
+    for expense in expenses:
+        if expense["id"] == expense_id:
+            print("\nExpense found: ")
+            display_expense()
+
+            confirm = input("\n Are you sure you want to delete it? (y/n): ").lower()
+
+            if confirm == "y" or confirm == "yes":
+                expenses.remove(expense)
+                print("Expense deleted successfully.")
+            else:
+                print("Deletion cancelled.")
+
+            return
+        print("Expense ID not found")
+
+# calculate total
+def calculate_total():
+    total = 0
+
+    for expense in expenses:
+        total += expense["amount"]
+
+    return total
+
+# calculation Average
+
+def calculate_average():
+    if len(expenses) == 0:
+        return 0
+
+    total = calculate_total()
+
+    return total/len(expenses)
+
+# function to find highest expense and lowest expense
+
+
+
+
 
