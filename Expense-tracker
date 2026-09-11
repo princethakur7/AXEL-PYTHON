@@ -198,7 +198,177 @@ def calculate_average():
 
     return total/len(expenses)
 
-# function to find highest expense and lowest expense
+# Find Highest Expense
+def find_highest_expense():
+    if len(expenses) == 0:
+        return None
+
+    highest = expenses[0]
+
+    for expense in expenses:
+        if expense["amount"] > highest["amount"]:
+            highest = expense
+
+    return highest
+
+
+def find_lowest_expense():
+    if len(expenses) == 0:
+        return None
+
+    lowest = expenses[0]
+
+    for expense in expenses:
+        if expense["amount"] < lowest["amount"]:
+            lowest = expense
+
+    return lowest
+
+# Expense summary
+def expense_summary():
+    print("\n------- EXPENSE SUMMARY ---------")
+
+    if len(expenses) == 0:
+        print("No expenses available.")
+        return
+
+    total = calculate_total()
+    avergae = calculate_average()
+
+    highest = find_highest_expense()
+    lowest = find_lowest_expense()
+
+    print("Number of expenses : ", len(expenses))
+    print("total spending     : Rs", format(total, ".2f"))
+    print("Avergae expense    :", format(avergae, ".2f"))
+
+    print("\nHighest Expense: ")
+    display_expense(highest)
+
+    print("\nLowest Expense:")
+    display_expense(lowest)
+
+#  Category wise summary
+
+def category_summary():
+    print("\n-------- Category Summary ----------------")
+
+    if len(expenses) == 0:
+        print("No expenses available")
+        return
+
+    categories = {}
+
+    for expense in expenses:
+        category = expense["category"]
+
+        if category not in categories:
+            categories[category] = 0
+
+        categories[category] += expense["amount"]
+
+    for category, amount in categories.items():
+        print(
+            category, "Rs", format(amount, ".2f")
+        )
+
+
+# Set Budget
+def set_budget():
+    global budget
+
+    print("----------- SET MONTHLY BUDGET ---------------")
+
+    while True:
+        try:
+            amount = float(input("Enter monthly budget: Rs"))
+            if amount <= 0:
+                print("Budget must be greater than 0.")
+            else:
+                budget = amount
+
+                print(
+                    "Monthly Budget set to Rs",
+                    format(budget, ".2f")
+                )
+                return
+        except ValueError:
+            print("Please enter a valid number")
+
+
+# Budget Status
+def budget_status():
+    print("\n ------- BUDGET STATUS --------")
+
+    if budget == 0:
+        print("Monthly Budget has bot been set.")
+        return
+
+    total = calculate_total()
+    remaining = budget - total
+
+    print("Monthly Budget : Rs", format(budget, ".2f"))
+    print("Total Spent    : rs", format(total,".2f"))
+
+    if remaining > 0:
+        print(
+            "Remaining      : Rs", format(remaining, ".2f")
+        )
+
+        percentage = (total/budget)*100
+
+        print("Budget Used    : ", format(percentage, ".2f"), "%")
+    elif remaining == 0:
+        print("Remaining       : Rs 0.00")
+        print("Ypu have used your entire budget")
+    else:
+        exceeded = abs(remaining)
+
+        print("Budget Exceeded : Rs". format(exceeded, ".2f"))
+        print("WARNING : YOU HAVE EXCEEDED YOUR BUDGET!")
+
+# main Program
+def main():
+    while True:
+        show_menu()
+        choice = input("Enter your choice : ")
+
+        if choice == "1":
+            add_expense()
+
+        elif choice == "2":
+            view_expense()
+
+        elif choice == "3":
+            search_expense()
+
+        elif choice == "4":
+            filter_category()
+
+        elif choice == "5":
+            delete_expense()
+
+        elif choice == "6":
+            expense_summary()
+
+        elif choice == "7":
+            category_summary()
+
+        elif choice == "8":
+            set_budget()
+
+        elif choice == "9":
+            budget_status()
+
+        elif choice == "10":
+            print("\nThank you for using Expense Tracker!")
+            print("Goodbye!")
+            break
+        else:
+            print("Invlaid choice. PLease try again")
+
+
+main()
 
 
 
