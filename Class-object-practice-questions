@@ -1,0 +1,244 @@
+# Python Classes and Objects - Practice
+
+## 1. Student Information
+
+### Question
+
+Create a `Student` class that stores a student's:
+
+* Name
+* Age
+* Class
+
+Create one student object and display all the information.
+
+### Code
+
+```python
+# Create Student class
+class Student:
+
+    # Constructor
+    def __init__(self, name, age, class_name):
+        self.name = name
+        self.age = age
+        self.class_name = class_name
+
+    # Display student information
+    def show_info(self):
+        print("Name:", self.name)
+        print("Age:", self.age)
+        print("Class:", self.class_name)
+
+
+# Create an object
+student1 = Student("Rahul", 14, 8)
+
+# Display information
+student1.show_info()
+```
+
+............................................................
+
+## 2. Mobile Phone
+
+### Question
+
+Create a `Mobile` class that stores:
+
+* Brand
+* Model
+* Price
+
+Create two mobile objects and display their details.
+
+### Code
+
+```python
+# Create Mobile class
+class Mobile:
+
+    # Constructor
+    def __init__(self, brand, model, price):
+        self.brand = brand
+        self.model = model
+        self.price = price
+
+    # Display mobile details
+    def show_details(self):
+        print("Brand:", self.brand)
+        print("Model:", self.model)
+        print("Price:", self.price)
+
+
+# Create two objects
+phone1 = Mobile("Apple", "iPhone 15", 70000)
+phone2 = Mobile("Samsung", "S24", 65000)
+
+# Display details
+phone1.show_details()
+
+print()
+
+phone2.show_details()
+```
+
+............................................................
+
+# Medium Level
+
+## 3. Bank Account
+
+### Question
+
+Create a `BankAccount` class that stores:
+
+* Account holder name
+* Account number
+* Balance
+
+Create methods to:
+
+* Deposit money
+* Withdraw money
+* Display balance
+
+The user should not be allowed to withdraw more money than the available balance.
+
+### Code
+
+```python
+# Create BankAccount class
+class BankAccount:
+
+    # Constructor
+    def __init__(self, name, account_number, balance):
+        self.name = name
+        self.account_number = account_number
+        self.balance = balance
+
+    # Deposit money
+    def deposit(self, amount):
+        self.balance += amount
+        print("₹", amount, "deposited successfully.")
+
+    # Withdraw money
+    def withdraw(self, amount):
+
+        # Check if enough balance is available
+        if amount <= self.balance:
+            self.balance -= amount
+            print("₹", amount, "withdrawn successfully.")
+        else:
+            print("Insufficient balance.")
+
+    # Display account balance
+    def show_balance(self):
+        print("Account Holder:", self.name)
+        print("Account Number:", self.account_number)
+        print("Balance: ₹", self.balance)
+
+
+# Create an object
+account1 = BankAccount("Rahul", "ACC101", 10000)
+
+# Display initial balance
+account1.show_balance()
+
+# Deposit money
+account1.deposit(5000)
+
+# Withdraw money
+account1.withdraw(3000)
+
+# Display updated balance
+account1.show_balance()
+```
+
+............................................................
+
+## 4. Shopping Cart
+
+### Question
+
+Create a `Product` class that stores:
+
+* Product name
+* Price
+* Quantity
+
+Create a method that calculates the total price.
+
+**Formula:**
+
+```text
+Total Price = Price × Quantity
+```
+
+Create two product objects and display their details and total prices.
+
+### Code
+
+```python
+# Create Product class
+class Product:
+
+    # Constructor
+    def __init__(self, name, price, quantity):
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+
+    # Calculate total price
+    def total_price(self):
+        return self.price * self.quantity
+
+    # Display product details
+    def show_details(self):
+        print("Product:", self.name)
+        print("Price:", self.price)
+        print("Quantity:", self.quantity)
+        print("Total Price:", self.total_price())
+
+
+# Create two objects
+product1 = Product("Laptop", 50000, 1)
+product2 = Product("Mouse", 1000, 2)
+
+# Display product details
+product1.show_details()
+
+print()
+
+product2.show_details()
+```
+
+............................................................
+
+HOMEWORK 
+
+5. Employee Salary
+Question
+
+Create an Employee class with:
+
+Name
+Employee ID
+Basic salary
+
+Create a method to calculate salary after adding a 10% bonus.
+
+Display:
+
+Employee Name
+Employee ID
+Basic Salary
+Bonus
+Final Salary
+Logic
+Store employee information.
+Calculate 10% bonus.
+Add bonus to basic salary.
+Display the final salary.
+
+
