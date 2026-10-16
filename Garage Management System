@@ -1,0 +1,89 @@
+# Repair Garage Management System
+
+'''
+- Feature List
+1. Vehicle Registration
+2. customer and vehicle record
+3. Service and repair management
+4. mechanic assignment
+5. Repair status tracking
+6. automatic billing system
+7. Payment management
+8. Garage dashboard
+'''
+
+from abc import ABC, abstractmethod
+from datetime import datetime
+
+class Customer:
+
+    def __init__(self, customer_id, name, phone):
+        self.customer_id = customer_id
+        self.name = name 
+        self.phone = phone 
+        
+        self.vehicles = []
+        
+    def add_vehichle(self, vehicle):
+        # associate a vehicle with this customer id 
+        self.vehicles.append(vehicle)
+        
+    def display_details(self):
+        print(f"\nCustomer ID : {self.customer_id}")
+        print(f"Name           : {self.name}")
+        print(f"Phone          : {self.phone}")
+        
+        print("Vehicles: ")
+    
+        if not self.vehicles:
+         print("No Vehicles registered.")
+         return 
+        
+        for vehicle in self.vehicles:
+            print(
+                f"{vehicle.registration_number}"
+                f"{vehicle.brand}{vehicle.model}"
+            )
+            
+class Vehicle(ABC):
+    def __init__(self,registration_number, brand, model):
+        self.registration_number = registration_number
+        self.brand = brand
+        self.model = model 
+        
+    @abstractmethod
+    def calculate_service_charge(self):
+        pass
+    
+    def display_details(self):
+        print(f"Registration : {self.registration_number}")
+        print(f"Brand        : {self.brand}")
+        print(f"Model        : {self.model}")
+        
+
+class Car(Vehicle):
+    def calcuate_service_charge(self):
+        return 2000
+    
+class Bike(Vehicle):
+    def calculate_service_charge(self):
+        return 800
+            
+class Mechanic:
+    def __init__(self, mechanic_id, name, specialization):
+        self.mechanic_id = mechanic_id
+        self.name = name 
+        self.specialization = specialization
+        
+    def display_details(self):
+        print(f"\nMechanic ID : {self.mechanic_id}")
+        print(f"Name          : {self.name}")
+        print(f"Specialization : {self.specialization}")
+
+
+3. Service and repair management - DO not use ai 
+service_id, customer, vehicle, mechanic, description, part_cost = 0 
+        
+        
+
+
