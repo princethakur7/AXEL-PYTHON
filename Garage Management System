@@ -19,71 +19,172 @@ class Customer:
 
     def __init__(self, customer_id, name, phone):
         self.customer_id = customer_id
-        self.name = name 
-        self.phone = phone 
-        
+        self.name = name
+        self.phone = phone
+
         self.vehicles = []
-        
+
     def add_vehichle(self, vehicle):
-        # associate a vehicle with this customer id 
+        # associate a vehicle with this customer id
         self.vehicles.append(vehicle)
-        
+
     def display_details(self):
         print(f"\nCustomer ID : {self.customer_id}")
         print(f"Name           : {self.name}")
         print(f"Phone          : {self.phone}")
-        
+
         print("Vehicles: ")
-    
+
         if not self.vehicles:
          print("No Vehicles registered.")
-         return 
-        
+         return
+
         for vehicle in self.vehicles:
             print(
                 f"{vehicle.registration_number}"
                 f"{vehicle.brand}{vehicle.model}"
             )
-            
+
 class Vehicle(ABC):
     def __init__(self,registration_number, brand, model):
         self.registration_number = registration_number
         self.brand = brand
-        self.model = model 
-        
+        self.model = model
+
     @abstractmethod
     def calculate_service_charge(self):
         pass
-    
+
     def display_details(self):
         print(f"Registration : {self.registration_number}")
         print(f"Brand        : {self.brand}")
         print(f"Model        : {self.model}")
-        
+
 
 class Car(Vehicle):
     def calcuate_service_charge(self):
         return 2000
-    
+
 class Bike(Vehicle):
     def calculate_service_charge(self):
         return 800
-            
+
 class Mechanic:
     def __init__(self, mechanic_id, name, specialization):
         self.mechanic_id = mechanic_id
-        self.name = name 
+        self.name = name
         self.specialization = specialization
-        
+
     def display_details(self):
         print(f"\nMechanic ID : {self.mechanic_id}")
         print(f"Name          : {self.name}")
         print(f"Specialization : {self.specialization}")
 
 
-3. Service and repair management - DO not use ai 
+"""3. Service and repair management - DO not use ai 
 service_id, customer, vehicle, mechanic, description, part_cost = 0 
+        """
+
+
+class service_repair:
+    Valid_status = {
+        "pending",
+        "In Progress",
+        "Completed"
+    }
+
+
+    def __init__(self, service_id, customer, Vehicle, mechanic, description, part_cost = 0):
+        if part_cost < 0:
+            raise ValueError("Part cost cannot be negative.")
+
+        self.service_id = service_id
+        self.customer = customer
+        self.Vehicle = Vehicle
+        self.mechanic = mechanic
+        self.description = description
+
+        self.part_cost = part_cost
+
+        self._status = "Pending"
+        self._amount_paid = 0.0
+
+        self.created_at = datetime.now()
+
+    @property
+    def status(self):
+        return self._status
+
+
+    @property
+    def amount_paid(self):
+        return self._amount_paid
+
+    @property
+    def total_cost(self):
+        service_charge = self.Vehicle.calculate_service_charge()
+        return service_charge + self.part_cost
+
+    @property
+    def balance(self):
+        return round(self.total_cost - self._amount_paid, 2)
+
+    def update_status(self, new_status):
+        if new_status not in self.Valid_status:
+            raise ValueError("Invalid service status")
+
+        if self._status == "completed":
+            raise ValueError (
+                "A complete service cannot be changed"
+            )
+
+        if self._status == "completed" and self.balance >0:
+            raise ValueError(
+                "The outstanding bill must be paid first"
+            )
+            self._status = new_status
+
+        # add the billing part - show the detail of the bill as homework (to write it in a better you can use ai here)
+
+    '''def diplay_details(self):
+        print(f"\nService ID  : {self.service_id}")
+        print(f"Description   : {self.description}")
+        print(f"Mechanic ID   : {self.mechanic_id}")
+        print(f"Mechanic name : {self.name}")
+        print(f"Part Cost     : {self.part_cost}")
+        
+        Please complete this. 
+        '''
+
+class GarageManagementSystem:
+    def __init__(self):
+        self.customer = {}
+        self.vehicles = {}
+        self.mechanics = {}
+        self.services = {}
+
+        self.customer_counter = 1
+        self.mechanic_count = 1
+        self.services_count = 1
+
+        self.add_mechanic(
+            "Amit Sharma",
+            "Cars and general servicing"
+        )
+        self.add_mechanic(
+            "Rahul Kumar",
+            "Bike and general serving"
+        )
+
+    def registered_customer(self,name, phone):
+        
+        customer = Customer(
+            customer_id, 
+            name, 
+            phone
+        )
         
         
+# plan the shot code for this project - i will use ai 
 
 
