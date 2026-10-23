@@ -1,0 +1,120 @@
+from abc import ABC, abstractmethod
+
+class Vehicle(ABC):
+    def __init__(self, owner, number, model):
+        self.owner = owner
+        self.number = number
+        self.model = model
+
+    @abstractmethod
+    def service_charge(self):
+        pass
+
+#inheritance
+class Car(Vehicle):
+    def service_charge(self):
+        return 2000
+
+class Bike(Vehicle):
+    def service_charge(self):
+        return 800
+
+class Mechanic:
+    def __init__(self, name):
+        self.name = name
+
+class ServiceJob:
+    def __init__(self, vehicle, mechanic, part_cost):
+        self.vehicle = vehicle
+        self.mechanic = mechanic
+        self.part_cost = part_cost
+        self.status = "Pending"
+        self.__paid = False
+
+    # Polymorphism
+    def show_bill(self):
+        total = self.vehicle.service_charge() +self.part_cost
+        print("Owner: ", self.vehicle.owner)
+        print("Vehicle:", self.vehicle.model)
+        print("Mechanic:", self.mechanic.name)
+        print("Total bill : Rs", total)
+        print("status: ", self.status)
+        print("Payment: ", "Paid" if self.__paid else "unpaid")
+
+    def complete_payment(self):
+        if self.__paid:
+            print("Bill already paid")
+        else:
+            self.__paid = True
+            self.status = "Completed"
+            print("Payment successful!")
+
+    def start_service(self):
+        if not self.__paid:
+            self.status = "In Progress"
+            
+# Garage Management 
+class Garage:
+    def __init__(self):
+        self.jobs= []
+        self.mechanics = [
+            Mechanic("Rahul"),
+            Mechanic("Aman")
+        ]
+        
+    def add_job(self):
+        owner = input("Customer name: ")
+        number = input("Vehicle number: ")
+        model = input("Vehicle model: ")
+        
+        kind = input("Enter car or bike : ").lower()
+        
+        if kind == "car":
+            vehicle = Car(owner, number, model)
+        elif kind == "bike":
+            vehicle = Bike(owner, number, model)
+        else:
+            print("Invalid vehicle type.")
+            return 
+        
+        print("1. Rahul")
+        print("2. Aman")
+        choice = input("Choose mechanic: ")
+        
+        if choice == "1":
+            mechanic = self.mechanics[0]
+        elif choice == "2":
+            mechanic = self.mechanics[1]
+        else:
+            print("Invalid mechanic choice.")
+            return 
+        
+        try:
+            parts = float(input("Spare part cost : "))
+            if parts < 0: 
+                print("Cost cannot be negative")
+                return 
+        except ValueError:
+            print("Enter a valid amount : ")
+            return 
+        
+        job = ServiceJob(vehicle, mechanic,parts)
+        self.jobs.append(job)
+        print("Service job created")
+        
+    def show_jobs(self):
+        if not self.jobs:
+            print("No service jobs found")
+        for i, job in enumerate(self.jobs, start=1):
+            print("\nJob ID:", i)
+            job.show_bill()
+            
+    def run(self):
+        while True: 
+            
+            
+        
+            
+            
+
+
