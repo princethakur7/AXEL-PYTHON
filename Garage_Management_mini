@@ -10,18 +10,22 @@ class Vehicle(ABC):
     def service_charge(self):
         pass
 
-#inheritance
+
+# inheritance
 class Car(Vehicle):
     def service_charge(self):
         return 2000
+
 
 class Bike(Vehicle):
     def service_charge(self):
         return 800
 
+
 class Mechanic:
     def __init__(self, name):
         self.name = name
+
 
 class ServiceJob:
     def __init__(self, vehicle, mechanic, part_cost):
@@ -33,7 +37,7 @@ class ServiceJob:
 
     # Polymorphism
     def show_bill(self):
-        total = self.vehicle.service_charge() +self.part_cost
+        total = self.vehicle.service_charge() + self.part_cost
         print("Owner: ", self.vehicle.owner)
         print("Vehicle:", self.vehicle.model)
         print("Mechanic:", self.mechanic.name)
@@ -52,69 +56,111 @@ class ServiceJob:
     def start_service(self):
         if not self.__paid:
             self.status = "In Progress"
-            
-# Garage Management 
+
+
+# Garage Management
 class Garage:
     def __init__(self):
-        self.jobs= []
+        self.jobs = []
         self.mechanics = [
             Mechanic("Rahul"),
             Mechanic("Aman")
         ]
-        
+
     def add_job(self):
         owner = input("Customer name: ")
         number = input("Vehicle number: ")
         model = input("Vehicle model: ")
-        
+
         kind = input("Enter car or bike : ").lower()
-        
+
         if kind == "car":
             vehicle = Car(owner, number, model)
         elif kind == "bike":
             vehicle = Bike(owner, number, model)
         else:
             print("Invalid vehicle type.")
-            return 
-        
+            return
+
         print("1. Rahul")
         print("2. Aman")
         choice = input("Choose mechanic: ")
-        
+
         if choice == "1":
             mechanic = self.mechanics[0]
         elif choice == "2":
             mechanic = self.mechanics[1]
         else:
             print("Invalid mechanic choice.")
-            return 
-        
+            return
+
         try:
             parts = float(input("Spare part cost : "))
-            if parts < 0: 
+            if parts < 0:
                 print("Cost cannot be negative")
-                return 
+                return
         except ValueError:
             print("Enter a valid amount : ")
-            return 
-        
-        job = ServiceJob(vehicle, mechanic,parts)
+            return
+
+        job = ServiceJob(vehicle, mechanic, parts)
         self.jobs.append(job)
         print("Service job created")
-        
+
     def show_jobs(self):
         if not self.jobs:
             print("No service jobs found")
         for i, job in enumerate(self.jobs, start=1):
             print("\nJob ID:", i)
             job.show_bill()
-            
+
     def run(self):
-        while True: 
-            
-            
-        
-            
-            
+        while True:
+            print("\n---------------GARAGE MANAGEMENT------------------------")
+            print("1. Register Service job")
+            print("2. View all jobs")
+            print("3. Start Service")
+            print("4. Complete Service and Payment")
+            print("0. Exit")
+
+            choice = input("Enter choice : ")
+
+            if choice == "1":
+                self.add_job()
+
+            elif choice == "2":
+                self.show_jobs()
+
+            elif choice in ("3", "4"):
+                self.show_jobs()
+
+                try:
+                    job_id = int(input("Enter job ID : "))
+                    job = self.jobs[job_id-1]
+                except (ValueError, IndexError):
+                    print("Invalid job ID.")
+                    continue
+
+                if choice == "3":
+                    job.start_service()
+                    print("Service Status : ", job.status)
+                else:
+                    job.show_bill()
+                    job.complete_payment()
+
+            elif choice == "0":
+                print("Thank you ")
+                break
+
+            else:
+                print("Invalid Choice.")
+
+# Start the application
+garage = Garage()
+garage.run()
+
+
+
+
 
 
