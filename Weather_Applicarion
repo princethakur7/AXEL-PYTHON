@@ -1,0 +1,60 @@
+# Import request to communicate with the Weather API
+import requests
+
+# create a class for our weather application
+class WeatherApp:
+    def __init__(self):
+        self.geocoding_url="https://geocoding-api.open-meteo.com/v1/search"
+        self.weather_url="https://api.open-meteo.com/v1/forecast"
+
+    # Method 1: Find the latitude and longitude of a city
+    def get_coordinates(self, city):
+        # Prepare the parameters for the geocoding API
+        params = {
+            "name":city,
+            "count":1,
+            "language":"en",
+            "format":"json"
+        }
+
+        # send a GET request to the geocoding API
+        response = requests.get(self.geocoding_url,params=params,timout=10)
+
+        # Raise an error if the API request fails
+        response.raise_for_status()
+
+        # Convert the JSON response into a python dictionary
+        data = response.json()
+
+        #check whether the city exists
+        if not data.get("results"):
+            return None
+
+        #extract information about the first matching city
+        location = data["result"][0]
+        # Need to check this
+        return {
+            "name": location["name"],
+            "country":location.get("country", "unkown"),
+            "latitude": location["latitude"],
+            "longitude":location["longitude"]
+        }
+
+    # Method 2: Fetch current weather using coordingates
+    def get_wether(self, latitude, longitude):
+        params = {
+            "latitude":latitude,
+            "longitude":longitude,
+            "current":{
+                "temperature_2m,"
+                "relative_humidity_2m,"
+                "apparent_temperature,"
+                "weather_code,"
+                "wind_speed_10"
+            },
+            "timezone":"auto"
+        }
+
+
+#Homewokr 
+1. Find an API key case the information about movies 
