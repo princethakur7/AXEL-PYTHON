@@ -1,60 +1,153 @@
-# Import request to communicate with the Weather API
+# Simple Weather Application Using OOP
+# API: Open-Meteo
+
 import requests
 
-# create a class for our weather application
-class WeatherApp:
-    def __init__(self):
-        self.geocoding_url="https://geocoding-api.open-meteo.com/v1/search"
-        self.weather_url="https://api.open-meteo.com/v1/forecast"
 
-    # Method 1: Find the latitude and longitude of a city
+class WeatherApp:
+
+    def __init__(self):
+        # API URLs
+        self.geocoding_url = "https://geocoding-api.open-meteo.com/v1/search"
+        self.weather_url = "https://api.open-meteo.com/v1/forecast"
+
     def get_coordinates(self, city):
-        # Prepare the parameters for the geocoding API
+        # Send a request to find the city's coordinates
         params = {
-            "name":city,
-            "count":1,
-            "language":"en",
-            "format":"json"
+            "name": city,
+            "count": 1,
+            "language": "en",
+            "format": "json"
         }
 
-        # send a GET request to the geocoding API
-        response = requests.get(self.geocoding_url,params=params,timout=10)
+        response = requests.get(
+            self.geocoding_url,
+            params=params,
+            timeout=10
+        )
 
-        # Raise an error if the API request fails
         response.raise_for_status()
 
-        # Convert the JSON response into a python dictionary
         data = response.json()
 
-        #check whether the city exists
+        # Check whether the city was found
         if not data.get("results"):
             return None
 
-        #extract information about the first matching city
-        location = data["result"][0]
-        # Need to check this
+        location = data["results"][0]
+
         return {
             "name": location["name"],
-            "country":location.get("country", "unkown"),
+            "country": location.get("country", "Unknown"),
             "latitude": location["latitude"],
-            "longitude":location["longitude"]
+            "longitude": location["longitude"]
         }
 
-    # Method 2: Fetch current weather using coordingates
-    def get_wether(self, latitude, longitude):
+    def get_weather(self, latitude, longitude):
+        # Request the current weather
         params = {
-            "latitude":latitude,
-            "longitude":longitude,
-            "current":{
+            "latitude": latitude,
+            "longitude": longitude,
+            "current": (
                 "temperature_2m,"
                 "relative_humidity_2m,"
                 "apparent_temperature,"
                 "weather_code,"
-                "wind_speed_10"
-            },
-            "timezone":"auto"
+                "wind_speed_10m"
+            ),
+            "timezone": "auto"
         }
 
+        response = requests.get(
+            self.weather_url,
+            params=params,
+            timeout=10
+        )
 
-#Homewokr 
-1. Find an API key case the information about movies 
+        response.raise_for_status()
+
+        data = response.json()
+
+        return data["current"]
+
+    def get_weather_condition(self, code):
+        # Convert the weather code into a readable condition
+        conditions = {
+            0: "Clear Sky",
+            1: "Mainly Clear",
+            2: "Partly Cloudy",
+            3: "Overcast",
+            45: "Foggy",
+            48: "Depositing Rime Fog",
+            51: "Light Drizzle",
+            53: "Moderate Drizzle",
+            55: "Dense Drizzle",
+            61: "Slight Rain",
+            63: "Moderate Rain",
+            65: "Heavy Rain",
+            71: "Slight Snow",
+            73: "Moderate Snow",
+            75: "Heavy Snow",
+            80: "Rain Showers",
+            81: "Moderate Rain Showers",
+            82: "Heavy Rain Showers",
+            95: "Thunderstorm"
+        }
+
+        return conditions.get(code, "Other Weather Conditions")
+
+    def display_weather(self, city, weather):
+        # Display the weather information
+        condition = self.get_weather_condition(
+            weather["weather_code"]
+        )
+
+        print("\n" + "=" * 35)
+        print("       CURRENT WEATHER")
+        print("=" * 35)
+
+        print(f"City: {city}")
+        print(f"Temperature: {weather['temperature_2m']}°C")
+        print(f"Feels Like: {weather['apparent_temperature']}°C")
+        print(f"Condition: {condition}")
+        print(f"Humidity: {weather['relative_humidity_2m']}%")
+        print(f"Wind Speed: {weather['wind_speed_10m']} km/h")
+
+        print("=" * 35)
+
+    def run(self):
+        # Main application logic
+        city = input("Enter city name: ").strip()
+
+        if not city:
+            print("Please enter a city name.")
+            return
+
+        try:
+            location = self.get_coordinates(city)
+
+            if location is None:
+                print("City not found. Please try another city.")
+                return
+
+            weather = self.get_weather(
+                location["latitude"],
+                location["longitude"]
+            )
+
+            city_name = f"{location['name']}, {location['country']}"
+
+            self.display_weather(city_name, weather)
+
+        except requests.exceptions.RequestException:
+            print("Unable to connect to the weather service.")
+
+        except (KeyError, ValueError):
+            print("Unable to process the weather data.")
+
+
+# Create an object of the WeatherApp class
+app = WeatherApp()
+
+# Run the application
+app.run()
