@@ -151,3 +151,7 @@ app = WeatherApp()
 
 # Run the application
 app.run()
+
+# Homework
+# Make the program as if you wanted to search weather of different city (Try not to use AI)
+# Compare the weather of of two city (use AI)
